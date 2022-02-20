@@ -1,6 +1,6 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, ThemeOptions } from '@mui/material/styles'
 
-const getDesignTokens = (mode: string) => ({
+const getDesignTokens = (mode: string) => <ThemeOptions>({
   typography: {
     fontFamily: [
       'Montserrat',
@@ -23,34 +23,9 @@ const getDesignTokens = (mode: string) => ({
           background: {
             default: '#000000',
             paper: '#000000'
-          },
-          text: {
-            // primary: '#fff',
-            // secondary: '#000000',
-          },
+          }
         }),
   },
-});
-
-
-
-getDesignTokens
+})
 
 export const theme = createTheme(getDesignTokens('dark'))
-
-// export const darkTheme = createTheme({
-//   palette: {
-//     mode: 'dark',
-//     background: {
-//       default: 'FFFFFF',
-//     }
-//   },
-//
-//   typography: {
-//     fontFamily: [
-//       'Montserrat',
-//       'system-ui',
-//       'sans-serif',
-//     ].join(','),
-//   }
-// });

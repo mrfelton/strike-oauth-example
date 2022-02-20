@@ -20,8 +20,8 @@ export default function Strike<
     userinfo: {
       url: `${process.env.STRIKE_IDENTITY_SERVER_URL}/connect/userinfo`,
       async request({ tokens }) {
-        const profile = decodeJwt(tokens.id_token ?? '');
-        const accessToken = decodeJwt(tokens.access_token ?? '');
+        const profile = decodeJwt(tokens.id_token ?? '')
+        const accessToken = decodeJwt(tokens.access_token ?? '')
 
         profile.name = accessToken.name
         profile.email = accessToken.email
