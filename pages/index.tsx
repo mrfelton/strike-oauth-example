@@ -13,13 +13,18 @@ const Home: NextPage = () => {
         <CardContent sx={{ p: 2, display: 'flex' }}>
           <Box>
             <Stack>
-            {
-              session ? <>
-                <Typography sx={{ mb: 3 }}>Signed in as {session.user?.name ?? session.user?.email}</Typography>
-                <Button variant="outlined" onClick={() => signOut()}>Sign out</Button>
-              </> :
-              <Button variant="outlined" onClick={() => signIn('strike')}>Login with Strike</Button>
-            }
+
+              {!session && (
+                <Button variant="outlined" onClick={() => signIn('strike')}>Login with Strike</Button>
+              )}
+
+              {session && (
+                <>
+                  <Typography sx={{ mb: 3 }}>Signed in as {session.user?.name ?? session.user?.email}</Typography>
+                  <Button variant="outlined" onClick={() => signOut()}>Sign out</Button>
+                </>
+              )}
+
             </Stack>
           </Box>
         </CardContent>
