@@ -1,13 +1,11 @@
 # Strike OAuth Exmaple
 
-> Simple proof of concept that demonstrates how Strike OAuth
+> Simple proof of concept that demonstrates Strike OAuth Connect
 
   * [Installation](#installation)
   * [Development](#development)
   * [Configuration](#configuration)
   * [Demo](#demo)
-
-This is a basic Next.js app that demonstrates Strike OAuth Connect.
 
 ## Installation
 
@@ -19,7 +17,7 @@ npm install
 
 ## Development
 
-Run the development server:
+This is a basic Next.js app. Run the development server:
 
 ```bash
 npm run dev
