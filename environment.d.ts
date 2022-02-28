@@ -7,6 +7,7 @@ declare global {
       STRIKE_IDENTITY_SERVER_CLIENT_ID: string;
       STRIKE_IDENTITY_SERVER_CLIENT_SECRET: string;
       NEXTAUTH_SECRET: string;
+      NEXTAUTH_URL: string;
     }
   }
 }
