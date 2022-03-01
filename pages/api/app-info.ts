@@ -1,8 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from "next-auth/react"
-import { getToken, JWT } from "next-auth/jwt"
-
-const secret = process.env.NEXTAUTH_SECRET
 
 type Data = {
   STRIKE_API_URI?: string
@@ -14,9 +10,6 @@ type Data = {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const session = await getSession({ req })
-  const token = await getToken({ req, secret })
-
   res.status(200).json({
     STRIKE_API_URI: process.env.STRIKE_API_URI,
     STRIKE_API_SCOPE: process.env.STRIKE_API_SCOPE,
