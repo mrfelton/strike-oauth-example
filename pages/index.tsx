@@ -1,13 +1,24 @@
+import { useEffect } from "react";
 import type { NextPage, GetServerSideProps } from 'next'
 import { useSession, signIn, signOut } from "next-auth/react"
 import { Box, Button, Card, CardHeader, CardContent, Stack, Typography } from '@mui/material'
 import { Page } from '../components'
 import { AccountData } from '../components'
-import { getData } from './api/invoices'
+import { getInvoices } from './api/invoices'
 import { PageResults, Invoice } from 'lib/strike-api'
 
-const Home: NextPage<PageResults<Invoice>> = (invoices) => {
+export interface Data {
+  invoices: PageResults<Invoice>
+}
+
+const Home: NextPage<Data> = ({ invoices }) => {
   const { data: session } = useSession()
+
+  useEffect(() => {
+    if (session?.error === "RefreshAccessTokenError") {
+      signIn(); // Force sign in to hopefully resolve error
+    }
+  }, [session]);
 
   return (
     <Page>
@@ -39,7 +50,7 @@ const Home: NextPage<PageResults<Invoice>> = (invoices) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps = async ({ req } ) => {
-  var data = await getData(req);
-  return { props: { invoices: data } }
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const invoices = await getInvoices(context.req);
+  return { props: { invoices } }
 }

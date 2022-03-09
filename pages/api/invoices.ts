@@ -4,7 +4,7 @@ import { api } from 'lib/api.js'
 import { PageResults, Invoice } from 'lib/strike-api'
 import { IncomingMessage } from 'http'
 
-export async function getData(req: IncomingMessage) {
+export async function getInvoices(req: IncomingMessage) {
   const session = await getSession({ req })
   if (session) {
     api.init(process.env.STRIKE_API_URI, session?.accessToken)
@@ -14,7 +14,7 @@ export async function getData(req: IncomingMessage) {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<PageResults<Invoice>>) => {
-  const data = await getData(req);
+  const data = await getInvoices(req);
   data ? res.status(200).json(data) : res.status(401)
   res.end()
 }

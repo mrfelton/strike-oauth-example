@@ -1,5 +1,46 @@
 import NextAuth from "next-auth"
+import { JWT } from "next-auth/jwt"
 import StrikeProvider from "lib/strike-oauth-provider"
+import ky from 'ky';
+
+/**
+ * Takes a token, and returns a new token with updated
+ * `accessToken` and `accessTokenExpires`. If an error occurs,
+ * returns the old token and an error property
+ */
+async function refreshAccessToken(token: JWT) {
+  try {
+    const response = await ky.post(`${process.env.STRIKE_IDENTITY_SERVER_URL}/connect/token`, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        client_id: process.env.STRIKE_IDENTITY_SERVER_CLIENT_ID,
+        client_secret: process.env.STRIKE_IDENTITY_SERVER_CLIENT_SECRET,
+        grant_type: 'refresh_token',
+        refresh_token: token.refreshToken
+      })
+    })
+
+    const refreshedTokens = await response.json()
+    if (!response.ok) {
+      throw refreshedTokens
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+    }
+  } catch (error) {
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    }
+  }
+}
+
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -77,16 +118,35 @@ export default NextAuth({
 
     async session({ session, token }) {
       // Send properties to the client, like an access_token from a provider.
+      session.user = token.user
+      session.error = token.error
       session.accessToken = token.accessToken
+      session.accessTokenExpires = token.accessTokenExpires
+
       return session
     },
 
-    async jwt({ token, account }) {
-      // Persist the OAuth access_token to the token right after signin
-      if (account) {
-        token.accessToken = account.access_token
+    async jwt({ token, user, account }) {
+      // Initial sign in
+      if (account && user) {
+        return {
+          ...token,
+          accessToken: account.access_token,
+          accessTokenExpires: account.expires_at ?? 1 * 1000,
+          refreshToken: account.refresh_token,
+          user,
+        }
       }
-      return token
+
+      // Return previous token if the access token has not expired yet
+      if (Date.now() < token.accessTokenExpires) {
+        return token
+      }
+
+      // Access token has expired, try to update it
+      const newToken = await refreshAccessToken(token)
+
+      return newToken;
     }
   },
 

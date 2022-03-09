@@ -15,6 +15,7 @@ export default function Strike<
         response_type: 'code',
       }
     },
+    idToken: false,
     checks: ['pkce', 'state'],
     userinfo: {
       url: `${process.env.STRIKE_IDENTITY_SERVER_URL}/connect/userinfo`,
