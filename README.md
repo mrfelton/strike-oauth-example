@@ -25,7 +25,7 @@ npm run dev
 
 ## Configuration
 
-All configuration is done through environment variables. Default values are provided in [.env.development](https://github.com/mrfelton/strike-oauth-example/blob/master/.env.development) for development.
+All configuration is done through environment variables. Some default values are provided in [.env.development](https://github.com/mrfelton/strike-oauth-example/blob/master/.env.development) for development purposes.
 
 Available options are:
 
@@ -50,7 +50,5 @@ Available options are:
 ## Demo
 
 View a demo at: https://strike-oauth-example.vercel.app/
-
-*Note: this is connected to the `next` sandbox environment so you will need an account on that sandbox in order to login.*
 
 <a href="https://strike-oauth-example.vercel.app/"><img width="836" alt="image" src="https://user-images.githubusercontent.com/200251/154948065-b21dfbce-b28d-4026-b7d4-de4c215df71a.png"></a>
